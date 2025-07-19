@@ -1,0 +1,3356 @@
+{
+  "/Users/cesarsoaresstenico/Documents/GitHub/project-test/backend/serverless.ts": {
+    "versionFramework": "4.17.1",
+    "servicePath": "/Users/cesarsoaresstenico/Documents/GitHub/project-test/backend/serverless.ts",
+    "serviceConfigFileName": "serverless.ts",
+    "service": {
+      "service": "user-service",
+      "useDotenv": true,
+      "plugins": [
+        "serverless-offline"
+      ],
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "environment": {
+          "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+          "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+          "COGNITO_CLIENT_SECRET": "<REDACTED>",
+          "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483"
+        },
+        "iamRoleStatements": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:PutItem",
+              "dynamodb:GetItem",
+              "dynamodb:Query",
+              "cognito-idp:SignUp"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+          }
+        ],
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "SignupLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/user-service-dev-signup"
+              }
+            },
+            "SigninLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/user-service-dev-signin"
+              }
+            },
+            "ConfirmSignupLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/user-service-dev-confirmSignup"
+              }
+            },
+            "UploadLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/user-service-dev-upload"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "user-service",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/user-service-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/user-service-dev*:*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "dynamodb:PutItem",
+                            "dynamodb:GetItem",
+                            "dynamodb:Query",
+                            "cognito-idp:SignUp"
+                          ],
+                          "Resource": "*"
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "s3:GetObject",
+                            "s3:PutObject"
+                          ],
+                          "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "user-service",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "SignupLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                  "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-signup.zip"
+                },
+                "Handler": "src/lambdas/auth/signup.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "user-service-dev-signup",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                    "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                    "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                    "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                    "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                    "NODE_OPTIONS": "--enable-source-maps"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "SignupLogGroup"
+              ]
+            },
+            "SigninLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                  "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-signin.zip"
+                },
+                "Handler": "src/lambdas/auth/signin.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "user-service-dev-signin",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                    "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                    "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                    "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                    "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                    "NODE_OPTIONS": "--enable-source-maps"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "SigninLogGroup"
+              ]
+            },
+            "ConfirmSignupLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                  "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-confirmSignup.zip"
+                },
+                "Handler": "src/lambdas/auth/confirmSignup.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "user-service-dev-confirmSignup",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                    "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                    "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                    "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                    "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                    "NODE_OPTIONS": "--enable-source-maps"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "ConfirmSignupLogGroup"
+              ]
+            },
+            "UploadLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                  "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-upload.zip"
+                },
+                "Handler": "src/lambdas/files/upload.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "user-service-dev-upload",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                    "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                    "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                    "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                    "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                    "NODE_OPTIONS": "--enable-source-maps"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "UploadLogGroup"
+              ]
+            },
+            "ConfirmSignupLambdaVersionq2YOpNtfe0tMORoWiEvDSgBUKN3C5g8JaI6yLM": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "ConfirmSignupLambdaFunction"
+                },
+                "CodeSha256": "Z/sR+u39GiMW6Xf317jcitBXQcE0pTH3www4uo5nnZo="
+              }
+            },
+            "SignupLambdaVersionFyaM11TFxGQlpBZLEbq8CnD6prbX378EzqLGtvoo": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "SignupLambdaFunction"
+                },
+                "CodeSha256": "IhY8a605FWoQTnaLAA/rtUvGXc6gsuOFS6HzJSPDIpo="
+              }
+            },
+            "SigninLambdaVersionMX21lXSX3wQex8YPkzwxI59Ai4xUAHh5Sz97DrKC24": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "SigninLambdaFunction"
+                },
+                "CodeSha256": "l/jseX9N4aD37sZfFWhKCMEMtDVNjWNXevMi+OGFMC8="
+              }
+            },
+            "UploadLambdaVersionpSFLHXwTLGmIrAYgEXrieN8Bq5AZL2jkJy42hVVd8": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "UploadLambdaFunction"
+                },
+                "CodeSha256": "DGZXYtdcSYbeq74ZLXBSXUA5bHtscBa6JNwjsnEjwzM="
+              }
+            },
+            "ApiGatewayRestApi": {
+              "Type": "AWS::ApiGateway::RestApi",
+              "Properties": {
+                "Name": "dev-user-service",
+                "EndpointConfiguration": {
+                  "Types": [
+                    "EDGE"
+                  ]
+                },
+                "Policy": ""
+              }
+            },
+            "ApiGatewayResourceSignup": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "signup",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayResourceSignin": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "signin",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayResourceConfirmDashsignup": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "confirm-signup",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayResourceUpload": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "upload",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodSignupOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceSignup"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodSigninOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceSignin"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodConfirmDashsignupOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceConfirmDashsignup"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodUploadOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceUpload"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodSignupPost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceSignup"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "SignupLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "SignupLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodSigninPost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceSignin"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "SigninLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "SigninLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodConfirmDashsignupPost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceConfirmDashsignup"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "ConfirmSignupLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "ConfirmSignupLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodUploadPost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceUpload"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "UploadLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "UploadLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayDeployment1752847884947": {
+              "Type": "AWS::ApiGateway::Deployment",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "StageName": "dev"
+              },
+              "DependsOn": [
+                "ApiGatewayMethodSignupOptions",
+                "ApiGatewayMethodSigninOptions",
+                "ApiGatewayMethodConfirmDashsignupOptions",
+                "ApiGatewayMethodUploadOptions",
+                "ApiGatewayMethodSignupPost",
+                "ApiGatewayMethodSigninPost",
+                "ApiGatewayMethodConfirmDashsignupPost",
+                "ApiGatewayMethodUploadPost"
+              ]
+            },
+            "SignupLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "SignupLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "SigninLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "SigninLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "ConfirmSignupLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "ConfirmSignupLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "UploadLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "UploadLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "UserServiceTable": {
+              "Type": "AWS::DynamoDB::Table",
+              "Properties": {
+                "TableName": "serverless-backend-table",
+                "BillingMode": "PAY_PER_REQUEST",
+                "AttributeDefinitions": [
+                  {
+                    "AttributeName": "PK",
+                    "AttributeType": "S"
+                  },
+                  {
+                    "AttributeName": "SK",
+                    "AttributeType": "S"
+                  }
+                ],
+                "KeySchema": [
+                  {
+                    "AttributeName": "PK",
+                    "KeyType": "HASH"
+                  },
+                  {
+                    "AttributeName": "SK",
+                    "KeyType": "RANGE"
+                  }
+                ]
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+              "Export": {
+                "Name": "sls-user-service-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "ConfirmSignupLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "ConfirmSignupLambdaVersionq2YOpNtfe0tMORoWiEvDSgBUKN3C5g8JaI6yLM"
+              },
+              "Export": {
+                "Name": "sls-user-service-dev-ConfirmSignupLambdaFunctionQualifiedArn"
+              }
+            },
+            "SignupLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "SignupLambdaVersionFyaM11TFxGQlpBZLEbq8CnD6prbX378EzqLGtvoo"
+              },
+              "Export": {
+                "Name": "sls-user-service-dev-SignupLambdaFunctionQualifiedArn"
+              }
+            },
+            "SigninLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "SigninLambdaVersionMX21lXSX3wQex8YPkzwxI59Ai4xUAHh5Sz97DrKC24"
+              },
+              "Export": {
+                "Name": "sls-user-service-dev-SigninLambdaFunctionQualifiedArn"
+              }
+            },
+            "UploadLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "UploadLambdaVersionpSFLHXwTLGmIrAYgEXrieN8Bq5AZL2jkJy42hVVd8"
+              },
+              "Export": {
+                "Name": "sls-user-service-dev-UploadLambdaFunctionQualifiedArn"
+              }
+            },
+            "ServiceEndpoint": {
+              "Description": "URL of the service endpoint",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    },
+                    "/dev"
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-user-service-dev-ServiceEndpoint"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "signup": {
+          "handler": "src/lambdas/auth/signup.handler",
+          "events": [
+            {
+              "http": {
+                "path": "signup",
+                "method": "post",
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "POST"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "user-service-dev-signup",
+          "environment": {
+            "NODE_OPTIONS": "--enable-source-maps"
+          },
+          "package": {
+            "artifact": "/Users/cesarsoaresstenico/Documents/GitHub/project-test/backend/.serverless/build/user-service-signup.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "SignupLambdaVersionFyaM11TFxGQlpBZLEbq8CnD6prbX378EzqLGtvoo"
+        },
+        "signin": {
+          "handler": "src/lambdas/auth/signin.handler",
+          "events": [
+            {
+              "http": {
+                "path": "signin",
+                "method": "post",
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "POST"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "user-service-dev-signin",
+          "environment": {
+            "NODE_OPTIONS": "--enable-source-maps"
+          },
+          "package": {
+            "artifact": "/Users/cesarsoaresstenico/Documents/GitHub/project-test/backend/.serverless/build/user-service-signin.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "SigninLambdaVersionMX21lXSX3wQex8YPkzwxI59Ai4xUAHh5Sz97DrKC24"
+        },
+        "confirmSignup": {
+          "handler": "src/lambdas/auth/confirmSignup.handler",
+          "events": [
+            {
+              "http": {
+                "path": "confirm-signup",
+                "method": "post",
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "POST"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "user-service-dev-confirmSignup",
+          "environment": {
+            "NODE_OPTIONS": "--enable-source-maps"
+          },
+          "package": {
+            "artifact": "/Users/cesarsoaresstenico/Documents/GitHub/project-test/backend/.serverless/build/user-service-confirmSignup.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "ConfirmSignupLambdaVersionq2YOpNtfe0tMORoWiEvDSgBUKN3C5g8JaI6yLM"
+        },
+        "upload": {
+          "handler": "src/lambdas/files/upload.handler",
+          "events": [
+            {
+              "http": {
+                "path": "upload",
+                "method": "post",
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "POST"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "user-service-dev-upload",
+          "environment": {
+            "NODE_OPTIONS": "--enable-source-maps"
+          },
+          "package": {
+            "artifact": "/Users/cesarsoaresstenico/Documents/GitHub/project-test/backend/.serverless/build/user-service-upload.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "UploadLambdaVersionpSFLHXwTLGmIrAYgEXrieN8Bq5AZL2jkJy42hVVd8"
+        }
+      },
+      "package": {
+        "individually": true,
+        "artifactsS3KeyDirname": "serverless/user-service/dev/code-artifacts",
+        "deploymentBucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+        "artifactDirectoryName": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z"
+      },
+      "custom": {
+        "esbuild": {
+          "bundle": true,
+          "minify": false,
+          "sourcemap": true,
+          "exclude": [
+            "aws-sdk"
+          ],
+          "target": "node18",
+          "define": {},
+          "platform": "node"
+        }
+      },
+      "resources": {
+        "Resources": {
+          "UserServiceTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "serverless-backend-table",
+              "BillingMode": "PAY_PER_REQUEST",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "PK",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "SK",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "PK",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "SK",
+                  "KeyType": "RANGE"
+                }
+              ]
+            }
+          }
+        },
+        "Outputs": {}
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "region": "us-east-1",
+      "stage": "dev",
+      "environment": {
+        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+        "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+        "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+        "COGNITO_CLIENT_SECRET": "<REDACTED>",
+        "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483"
+      },
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:PutItem",
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "cognito-idp:SignUp"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject"
+          ],
+          "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+        }
+      ],
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "SignupLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/user-service-dev-signup"
+            }
+          },
+          "SigninLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/user-service-dev-signin"
+            }
+          },
+          "ConfirmSignupLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/user-service-dev-confirmSignup"
+            }
+          },
+          "UploadLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/user-service-dev-upload"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "user-service",
+                        "dev",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup",
+                          "logs:TagResource"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/user-service-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/user-service-dev*:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "dynamodb:PutItem",
+                          "dynamodb:GetItem",
+                          "dynamodb:Query",
+                          "cognito-idp:SignUp"
+                        ],
+                        "Resource": "*"
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "s3:GetObject",
+                          "s3:PutObject"
+                        ],
+                        "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "user-service",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "SignupLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-signup.zip"
+              },
+              "Handler": "src/lambdas/auth/signup.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "user-service-dev-signup",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                  "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                  "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                  "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                  "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "SignupLogGroup"
+            ]
+          },
+          "SigninLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-signin.zip"
+              },
+              "Handler": "src/lambdas/auth/signin.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "user-service-dev-signin",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                  "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                  "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                  "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                  "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "SigninLogGroup"
+            ]
+          },
+          "ConfirmSignupLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-confirmSignup.zip"
+              },
+              "Handler": "src/lambdas/auth/confirmSignup.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "user-service-dev-confirmSignup",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                  "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                  "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                  "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                  "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "ConfirmSignupLogGroup"
+            ]
+          },
+          "UploadLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-upload.zip"
+              },
+              "Handler": "src/lambdas/files/upload.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "user-service-dev-upload",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                  "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                  "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                  "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                  "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "UploadLogGroup"
+            ]
+          },
+          "ConfirmSignupLambdaVersionq2YOpNtfe0tMORoWiEvDSgBUKN3C5g8JaI6yLM": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ConfirmSignupLambdaFunction"
+              },
+              "CodeSha256": "Z/sR+u39GiMW6Xf317jcitBXQcE0pTH3www4uo5nnZo="
+            }
+          },
+          "SignupLambdaVersionFyaM11TFxGQlpBZLEbq8CnD6prbX378EzqLGtvoo": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "SignupLambdaFunction"
+              },
+              "CodeSha256": "IhY8a605FWoQTnaLAA/rtUvGXc6gsuOFS6HzJSPDIpo="
+            }
+          },
+          "SigninLambdaVersionMX21lXSX3wQex8YPkzwxI59Ai4xUAHh5Sz97DrKC24": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "SigninLambdaFunction"
+              },
+              "CodeSha256": "l/jseX9N4aD37sZfFWhKCMEMtDVNjWNXevMi+OGFMC8="
+            }
+          },
+          "UploadLambdaVersionpSFLHXwTLGmIrAYgEXrieN8Bq5AZL2jkJy42hVVd8": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "UploadLambdaFunction"
+              },
+              "CodeSha256": "DGZXYtdcSYbeq74ZLXBSXUA5bHtscBa6JNwjsnEjwzM="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-user-service",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": ""
+            }
+          },
+          "ApiGatewayResourceSignup": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "signup",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceSignin": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "signin",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceConfirmDashsignup": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "confirm-signup",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceUpload": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "upload",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodSignupOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSignup"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodSigninOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSignin"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodConfirmDashsignupOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceConfirmDashsignup"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodUploadOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUpload"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodSignupPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSignup"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "SignupLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "SignupLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodSigninPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSignin"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "SigninLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "SigninLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodConfirmDashsignupPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceConfirmDashsignup"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ConfirmSignupLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "ConfirmSignupLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodUploadPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUpload"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "UploadLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "UploadLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1752847884947": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodSignupOptions",
+              "ApiGatewayMethodSigninOptions",
+              "ApiGatewayMethodConfirmDashsignupOptions",
+              "ApiGatewayMethodUploadOptions",
+              "ApiGatewayMethodSignupPost",
+              "ApiGatewayMethodSigninPost",
+              "ApiGatewayMethodConfirmDashsignupPost",
+              "ApiGatewayMethodUploadPost"
+            ]
+          },
+          "SignupLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "SignupLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "SigninLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "SigninLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "ConfirmSignupLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ConfirmSignupLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "UploadLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "UploadLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "UserServiceTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "serverless-backend-table",
+              "BillingMode": "PAY_PER_REQUEST",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "PK",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "SK",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "PK",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "SK",
+                  "KeyType": "RANGE"
+                }
+              ]
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+            "Export": {
+              "Name": "sls-user-service-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "ConfirmSignupLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ConfirmSignupLambdaVersionq2YOpNtfe0tMORoWiEvDSgBUKN3C5g8JaI6yLM"
+            },
+            "Export": {
+              "Name": "sls-user-service-dev-ConfirmSignupLambdaFunctionQualifiedArn"
+            }
+          },
+          "SignupLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "SignupLambdaVersionFyaM11TFxGQlpBZLEbq8CnD6prbX378EzqLGtvoo"
+            },
+            "Export": {
+              "Name": "sls-user-service-dev-SignupLambdaFunctionQualifiedArn"
+            }
+          },
+          "SigninLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "SigninLambdaVersionMX21lXSX3wQex8YPkzwxI59Ai4xUAHh5Sz97DrKC24"
+            },
+            "Export": {
+              "Name": "sls-user-service-dev-SigninLambdaFunctionQualifiedArn"
+            }
+          },
+          "UploadLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "UploadLambdaVersionpSFLHXwTLGmIrAYgEXrieN8Bq5AZL2jkJy42hVVd8"
+            },
+            "Export": {
+              "Name": "sls-user-service-dev-UploadLambdaFunctionQualifiedArn"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-user-service-dev-ServiceEndpoint"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "serviceRawFile": "import type { AWS } from \"@serverless/typescript\";\n\nconst serverlessConfiguration: AWS = {\n  service: \"user-service\",\n  useDotenv: true,\n  plugins: [\"serverless-offline\"],\n  provider: {\n    name: \"aws\",\n    runtime: \"nodejs18.x\",\n    region: \"us-east-1\",\n    stage: \"dev\",\n    environment: {\n      AWS_NODEJS_CONNECTION_REUSE_ENABLED: \"1\",\n      COGNITO_USER_POOL_ID: \"${env:COGNITO_USER_POOL_ID}\",\n      COGNITO_CLIENT_ID: \"${env:COGNITO_CLIENT_ID}\",\n      COGNITO_CLIENT_SECRET: \"${env:COGNITO_CLIENT_SECRET}\",\n      S3_BUCKET_NAME: \"${env:S3_BUCKET_NAME}\",\n    },\n    iamRoleStatements: [\n      {\n        Effect: \"Allow\",\n        Action: [\n          \"dynamodb:PutItem\",\n          \"dynamodb:GetItem\",\n          \"dynamodb:Query\",\n          \"cognito-idp:SignUp\",\n        ],\n        Resource: \"*\", // idealmente restrinja aos seus ARNs\n      },\n      {\n        Effect: \"Allow\",\n        Action: [\"s3:GetObject\", \"s3:PutObject\"],\n        Resource: \"arn:aws:s3:::user-service-uploads-${self:provider.stage}/*\",\n      },\n    ],\n  },\n  functions: {\n    signup: {\n      handler: \"src/lambdas/auth/signup.handler\",\n      events: [\n        {\n          http: {\n            path: \"signup\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    signin: {\n      handler: \"src/lambdas/auth/signin.handler\",\n      events: [\n        {\n          http: {\n            path: \"signin\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    confirmSignup: {\n      handler: \"src/lambdas/auth/confirmSignup.handler\",\n      events: [\n        {\n          http: {\n            path: \"confirm-signup\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    upload: {\n      handler: \"src/lambdas/files/upload.handler\",\n      events: [\n        {\n          http: {\n            path: \"upload\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n  },\n  package: { individually: true },\n  custom: {\n    esbuild: {\n      bundle: true,\n      minify: false,\n      sourcemap: true,\n      exclude: [\"aws-sdk\"],\n      target: \"node18\",\n      define: { \"require.resolve\": undefined },\n      platform: \"node\",\n    },\n  },\n  // resources: {\n  //   Resources: {\n  //     UserUploadsBucket: {\n  //       Type: \"AWS::S3::Bucket\",\n  //       Properties: {\n  //         BucketName: \"${env:S3_BUCKET_NAME}\",\n  //         CorsConfiguration: {\n  //           CorsRules: [\n  //             {\n  //               AllowedOrigins: [\"*\"], // ajuste conforme necessário\n  //               AllowedMethods: [\"GET\", \"PUT\", \"POST\", \"DELETE\"],\n  //               AllowedHeaders: [\"*\"],\n  //               MaxAge: 3000,\n  //             },\n  //           ],\n  //         },\n  //       },\n  //     },\n  //   },\n  // },\n  resources: {\n    Resources: {\n      UserServiceTable: {\n        Type: \"AWS::DynamoDB::Table\",\n        Properties: {\n          TableName: \"${env:DYNAMODB_TABLE_NAME}\",\n          BillingMode: \"PAY_PER_REQUEST\",\n          AttributeDefinitions: [\n            { AttributeName: \"PK\", AttributeType: \"S\" },\n            { AttributeName: \"SK\", AttributeType: \"S\" },\n          ],\n          KeySchema: [\n            { AttributeName: \"PK\", KeyType: \"HASH\" },\n            { AttributeName: \"SK\", KeyType: \"RANGE\" },\n          ],\n        },\n      },\n    },\n  },\n};\n\nmodule.exports = serverlessConfiguration;\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "orgId": "6d4b7dbc-e514-443b-a095-453832d16952",
+    "orgName": "cesarstenico",
+    "userId": "HsWBn9DTfxgzb2d4k0",
+    "userName": "cesarstenico",
+    "serviceProviderAwsAccountId": "720905201408",
+    "serviceProviderAwsCfStackName": "user-service-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:720905201408:stack/user-service-dev/ecd42a30-62b7-11f0-bf1a-12e1e2ec4969",
+    "serviceProviderAwsCfStackCreated": "2025-07-17T02:44:14.142Z",
+    "serviceProviderAwsCfStackUpdated": "2025-07-18T13:07:50.925Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_ROLLBACK_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "ConfirmSignupLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-confirmSignup:6",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-ConfirmSignupLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "SigninLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-signin:9",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-SigninLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "SignupLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-signup:12",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-SignupLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://27h4phm7p0.execute-api.us-east-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-user-service-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+        "ExportName": "sls-user-service-dev-ServerlessDeploymentBucketName"
+      },
+      {
+        "OutputKey": "UploadLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-upload:4",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-UploadLambdaFunctionQualifiedArn"
+      }
+    ],
+    "compiledCloudFormationTemplate": {
+      "AWSTemplateFormatVersion": "2010-09-09",
+      "Description": "The AWS CloudFormation template for this Serverless application",
+      "Resources": {
+        "SignupLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/user-service-dev-signup"
+          }
+        },
+        "SigninLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/user-service-dev-signin"
+          }
+        },
+        "ConfirmSignupLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/user-service-dev-confirmSignup"
+          }
+        },
+        "UploadLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/user-service-dev-upload"
+          }
+        },
+        "IamRoleLambdaExecution": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "lambda.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Policies": [
+              {
+                "PolicyName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "user-service",
+                      "dev",
+                      "lambda"
+                    ]
+                  ]
+                },
+                "PolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:CreateLogStream",
+                        "logs:CreateLogGroup",
+                        "logs:TagResource"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/user-service-dev*:*"
+                        }
+                      ]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:PutLogEvents"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/user-service-dev*:*:*"
+                        }
+                      ]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:PutItem",
+                        "dynamodb:GetItem",
+                        "dynamodb:Query",
+                        "cognito-idp:SignUp"
+                      ],
+                      "Resource": "*"
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "s3:GetObject",
+                        "s3:PutObject"
+                      ],
+                      "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+                    }
+                  ]
+                }
+              }
+            ],
+            "Path": "/",
+            "RoleName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "user-service",
+                  "dev",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  "lambdaRole"
+                ]
+              ]
+            }
+          }
+        },
+        "SignupLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+              "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-signup.zip"
+            },
+            "Handler": "src/lambdas/auth/signup.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "user-service-dev-signup",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                "NODE_OPTIONS": "--enable-source-maps"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "SignupLogGroup"
+          ]
+        },
+        "SigninLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+              "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-signin.zip"
+            },
+            "Handler": "src/lambdas/auth/signin.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "user-service-dev-signin",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                "NODE_OPTIONS": "--enable-source-maps"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "SigninLogGroup"
+          ]
+        },
+        "ConfirmSignupLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+              "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-confirmSignup.zip"
+            },
+            "Handler": "src/lambdas/auth/confirmSignup.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "user-service-dev-confirmSignup",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                "NODE_OPTIONS": "--enable-source-maps"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "ConfirmSignupLogGroup"
+          ]
+        },
+        "UploadLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+              "S3Key": "serverless/user-service/dev/1752847892552-2025-07-18T14:11:32.552Z/user-service-upload.zip"
+            },
+            "Handler": "src/lambdas/files/upload.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "user-service-dev-upload",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+                "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+                "COGNITO_CLIENT_SECRET": "<REDACTED>",
+                "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+                "NODE_OPTIONS": "--enable-source-maps"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "UploadLogGroup"
+          ]
+        },
+        "ConfirmSignupLambdaVersionq2YOpNtfe0tMORoWiEvDSgBUKN3C5g8JaI6yLM": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "ConfirmSignupLambdaFunction"
+            },
+            "CodeSha256": "Z/sR+u39GiMW6Xf317jcitBXQcE0pTH3www4uo5nnZo="
+          }
+        },
+        "SignupLambdaVersionFyaM11TFxGQlpBZLEbq8CnD6prbX378EzqLGtvoo": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "SignupLambdaFunction"
+            },
+            "CodeSha256": "IhY8a605FWoQTnaLAA/rtUvGXc6gsuOFS6HzJSPDIpo="
+          }
+        },
+        "SigninLambdaVersionMX21lXSX3wQex8YPkzwxI59Ai4xUAHh5Sz97DrKC24": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "SigninLambdaFunction"
+            },
+            "CodeSha256": "l/jseX9N4aD37sZfFWhKCMEMtDVNjWNXevMi+OGFMC8="
+          }
+        },
+        "UploadLambdaVersionpSFLHXwTLGmIrAYgEXrieN8Bq5AZL2jkJy42hVVd8": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "UploadLambdaFunction"
+            },
+            "CodeSha256": "DGZXYtdcSYbeq74ZLXBSXUA5bHtscBa6JNwjsnEjwzM="
+          }
+        },
+        "ApiGatewayRestApi": {
+          "Type": "AWS::ApiGateway::RestApi",
+          "Properties": {
+            "Name": "dev-user-service",
+            "EndpointConfiguration": {
+              "Types": [
+                "EDGE"
+              ]
+            },
+            "Policy": ""
+          }
+        },
+        "ApiGatewayResourceSignup": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Fn::GetAtt": [
+                "ApiGatewayRestApi",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "signup",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayResourceSignin": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Fn::GetAtt": [
+                "ApiGatewayRestApi",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "signin",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayResourceConfirmDashsignup": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Fn::GetAtt": [
+                "ApiGatewayRestApi",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "confirm-signup",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayResourceUpload": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Fn::GetAtt": [
+                "ApiGatewayRestApi",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "upload",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodSignupOptions": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "AuthorizationType": "NONE",
+            "HttpMethod": "OPTIONS",
+            "MethodResponses": [
+              {
+                "StatusCode": "200",
+                "ResponseParameters": {
+                  "method.response.header.Access-Control-Allow-Origin": true,
+                  "method.response.header.Access-Control-Allow-Headers": true,
+                  "method.response.header.Access-Control-Allow-Methods": true
+                },
+                "ResponseModels": {}
+              }
+            ],
+            "RequestParameters": {},
+            "Integration": {
+              "Type": "MOCK",
+              "RequestTemplates": {
+                "application/json": "{statusCode:200}"
+              },
+              "ContentHandling": "CONVERT_TO_TEXT",
+              "IntegrationResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                  },
+                  "ResponseTemplates": {
+                    "application/json": ""
+                  }
+                }
+              ]
+            },
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceSignup"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodSigninOptions": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "AuthorizationType": "NONE",
+            "HttpMethod": "OPTIONS",
+            "MethodResponses": [
+              {
+                "StatusCode": "200",
+                "ResponseParameters": {
+                  "method.response.header.Access-Control-Allow-Origin": true,
+                  "method.response.header.Access-Control-Allow-Headers": true,
+                  "method.response.header.Access-Control-Allow-Methods": true
+                },
+                "ResponseModels": {}
+              }
+            ],
+            "RequestParameters": {},
+            "Integration": {
+              "Type": "MOCK",
+              "RequestTemplates": {
+                "application/json": "{statusCode:200}"
+              },
+              "ContentHandling": "CONVERT_TO_TEXT",
+              "IntegrationResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                  },
+                  "ResponseTemplates": {
+                    "application/json": ""
+                  }
+                }
+              ]
+            },
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceSignin"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodConfirmDashsignupOptions": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "AuthorizationType": "NONE",
+            "HttpMethod": "OPTIONS",
+            "MethodResponses": [
+              {
+                "StatusCode": "200",
+                "ResponseParameters": {
+                  "method.response.header.Access-Control-Allow-Origin": true,
+                  "method.response.header.Access-Control-Allow-Headers": true,
+                  "method.response.header.Access-Control-Allow-Methods": true
+                },
+                "ResponseModels": {}
+              }
+            ],
+            "RequestParameters": {},
+            "Integration": {
+              "Type": "MOCK",
+              "RequestTemplates": {
+                "application/json": "{statusCode:200}"
+              },
+              "ContentHandling": "CONVERT_TO_TEXT",
+              "IntegrationResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                  },
+                  "ResponseTemplates": {
+                    "application/json": ""
+                  }
+                }
+              ]
+            },
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceConfirmDashsignup"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodUploadOptions": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "AuthorizationType": "NONE",
+            "HttpMethod": "OPTIONS",
+            "MethodResponses": [
+              {
+                "StatusCode": "200",
+                "ResponseParameters": {
+                  "method.response.header.Access-Control-Allow-Origin": true,
+                  "method.response.header.Access-Control-Allow-Headers": true,
+                  "method.response.header.Access-Control-Allow-Methods": true
+                },
+                "ResponseModels": {}
+              }
+            ],
+            "RequestParameters": {},
+            "Integration": {
+              "Type": "MOCK",
+              "RequestTemplates": {
+                "application/json": "{statusCode:200}"
+              },
+              "ContentHandling": "CONVERT_TO_TEXT",
+              "IntegrationResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                  },
+                  "ResponseTemplates": {
+                    "application/json": ""
+                  }
+                }
+              ]
+            },
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceUpload"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodSignupPost": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "POST",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceSignup"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "SignupLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "SignupLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodSigninPost": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "POST",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceSignin"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "SigninLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "SigninLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodConfirmDashsignupPost": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "POST",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceConfirmDashsignup"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "ConfirmSignupLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "ConfirmSignupLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodUploadPost": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "POST",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceUpload"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "UploadLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "UploadLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayDeployment1752847884947": {
+          "Type": "AWS::ApiGateway::Deployment",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "StageName": "dev"
+          },
+          "DependsOn": [
+            "ApiGatewayMethodSignupOptions",
+            "ApiGatewayMethodSigninOptions",
+            "ApiGatewayMethodConfirmDashsignupOptions",
+            "ApiGatewayMethodUploadOptions",
+            "ApiGatewayMethodSignupPost",
+            "ApiGatewayMethodSigninPost",
+            "ApiGatewayMethodConfirmDashsignupPost",
+            "ApiGatewayMethodUploadPost"
+          ]
+        },
+        "SignupLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "SignupLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "SigninLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "SigninLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "ConfirmSignupLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "ConfirmSignupLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "UploadLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "UploadLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "UserServiceTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "serverless-backend-table",
+            "BillingMode": "PAY_PER_REQUEST",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "PK",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "SK",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "PK",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "SK",
+                "KeyType": "RANGE"
+              }
+            ]
+          }
+        }
+      },
+      "Outputs": {
+        "ServerlessDeploymentBucketName": {
+          "Value": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+          "Export": {
+            "Name": "sls-user-service-dev-ServerlessDeploymentBucketName"
+          }
+        },
+        "ConfirmSignupLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "ConfirmSignupLambdaVersionq2YOpNtfe0tMORoWiEvDSgBUKN3C5g8JaI6yLM"
+          },
+          "Export": {
+            "Name": "sls-user-service-dev-ConfirmSignupLambdaFunctionQualifiedArn"
+          }
+        },
+        "SignupLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "SignupLambdaVersionFyaM11TFxGQlpBZLEbq8CnD6prbX378EzqLGtvoo"
+          },
+          "Export": {
+            "Name": "sls-user-service-dev-SignupLambdaFunctionQualifiedArn"
+          }
+        },
+        "SigninLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "SigninLambdaVersionMX21lXSX3wQex8YPkzwxI59Ai4xUAHh5Sz97DrKC24"
+          },
+          "Export": {
+            "Name": "sls-user-service-dev-SigninLambdaFunctionQualifiedArn"
+          }
+        },
+        "UploadLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "UploadLambdaVersionpSFLHXwTLGmIrAYgEXrieN8Bq5AZL2jkJy42hVVd8"
+          },
+          "Export": {
+            "Name": "sls-user-service-dev-UploadLambdaFunctionQualifiedArn"
+          }
+        },
+        "ServiceEndpoint": {
+          "Description": "URL of the service endpoint",
+          "Value": {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                ".execute-api.",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix"
+                },
+                "/dev"
+              ]
+            ]
+          },
+          "Export": {
+            "Name": "sls-user-service-dev-ServiceEndpoint"
+          }
+        }
+      }
+    }
+  }
+}
