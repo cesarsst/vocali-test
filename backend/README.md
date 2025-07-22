@@ -1,6 +1,6 @@
 # Serverless Backend with Node.js, TypeScript, and AWS
 
-A production-ready serverless backend built with Node.js, TypeScript, and orchestrated by Terraform. This project includes AWS Lambda functions, DynamoDB for data storage, S3 for file management, and Cognito for authentication.
+A production-ready serverless backend built with Node.js, TypeScript, and orchestrated by Serverless. This project includes AWS Lambda functions, DynamoDB for data storage, S3 for file management, and Cognito for authentication.
 
 ## 🏗️ Architecture
 
@@ -9,7 +9,6 @@ A production-ready serverless backend built with Node.js, TypeScript, and orches
 - **DynamoDB**: NoSQL database with single-table design
 - **S3**: File storage and static assets
 - **Cognito**: User authentication and authorization
-- **Terraform**: Infrastructure as Code
 
 ## 📁 Project Structure
 
@@ -21,7 +20,6 @@ A production-ready serverless backend built with Node.js, TypeScript, and orches
 │   ├── types/             # TypeScript interfaces
 │   ├── config/            # Configuration files
 │   └── __tests__/         # Unit tests
-├── infrastructure/        # Terraform configuration
 ├── package.json          # Dependencies and scripts
 ├── tsconfig.json         # TypeScript configuration
 └── jest.config.js        # Jest testing configuration
@@ -33,18 +31,20 @@ A production-ready serverless backend built with Node.js, TypeScript, and orches
 
 - Node.js 18+
 - npm or yarn
-- Terraform >= 1.0
+- Serverless
 - AWS CLI configured
 - AWS Account with appropriate permissions
 
 ### Installation
 
 1. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 2. **Build the project:**
+
    ```bash
    npm run build
    ```
@@ -55,26 +55,6 @@ A production-ready serverless backend built with Node.js, TypeScript, and orches
    ```
 
 ### Infrastructure Deployment
-
-1. **Initialize Terraform:**
-   ```bash
-   npm run terraform:init
-   ```
-
-2. **Plan infrastructure changes:**
-   ```bash
-   npm run terraform:plan
-   ```
-
-3. **Deploy infrastructure:**
-   ```bash
-   npm run terraform:apply
-   ```
-
-4. **Deploy Lambda functions:**
-   ```bash
-   npm run deploy:lambdas
-   ```
 
 ## 📚 API Endpoints
 
@@ -87,23 +67,22 @@ A production-ready serverless backend built with Node.js, TypeScript, and orches
 
 - **POST** `/files/upload` - Get signed URL for file upload
 
-### Users
-
-- **GET** `/users/{userId}` - Get user profile
-
 ## 🧪 Testing
 
 Run all tests:
+
 ```bash
 npm test
 ```
 
 Run tests in watch mode:
+
 ```bash
 npm run test:watch
 ```
 
 Generate coverage report:
+
 ```bash
 npm run test:coverage
 ```
@@ -122,16 +101,19 @@ Environment variables are managed through Terraform and AWS Lambda environment v
 ## 🏢 Services
 
 ### DynamoDB Service
+
 - Single-table design with PK/SK pattern
 - GSI for secondary access patterns
 - CRUD operations with proper error handling
 
 ### S3 Service
+
 - Pre-signed URLs for secure file uploads
 - File key generation with user isolation
 - Automatic file cleanup capabilities
 
 ### Cognito Service
+
 - User registration and authentication
 - Password validation and security
 - JWT token management
@@ -146,17 +128,9 @@ Environment variables are managed through Terraform and AWS Lambda environment v
 
 ## 📈 Monitoring and Logging
 
-- CloudWatch Logs integration
 - Structured logging with custom logger
 - Error tracking and debugging
 - Performance monitoring
-
-## 🚮 Cleanup
-
-To destroy all infrastructure:
-```bash
-npm run terraform:destroy
-```
 
 ## 🤝 Contributing
 

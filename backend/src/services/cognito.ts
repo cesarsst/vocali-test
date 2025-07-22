@@ -81,13 +81,6 @@ class CognitoService {
       return {
         accessToken: result.AuthenticationResult.AccessToken!,
         refreshToken: result.AuthenticationResult.RefreshToken!,
-        user: {
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-        },
       };
     } catch (error) {
       logger.error("Cognito signIn error", { email: loginData.email, error });

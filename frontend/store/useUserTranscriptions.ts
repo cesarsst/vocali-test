@@ -24,7 +24,7 @@ export const useTranscriptionStore = defineStore("transcription", {
         const auth = useAuthStore();
         const token = auth.getToken;
 
-        if (!token) throw new Error("Usuário não autenticado.");
+        if (!token) throw new Error("User not authenticated.");
 
         const response = await createTranscription(token, {
           transcription_name: transcriptionName,
@@ -32,13 +32,13 @@ export const useTranscriptionStore = defineStore("transcription", {
         });
 
         if (!response.success) {
-          throw new Error(response.error || "Erro ao criar transcrição.");
+          throw new Error(response.error || "Error creating transcription.");
         }
 
         this.success = true;
       } catch (err: any) {
-        console.error("Erro ao criar transcrição:", err);
-        this.error = err.message || "Erro desconhecido.";
+        console.error("Error creating transcription:", err);
+        this.error = err.message || "Unknown error.";
         throw err;
       } finally {
         this.loading = false;
@@ -50,11 +50,11 @@ export const useTranscriptionStore = defineStore("transcription", {
         const auth = useAuthStore();
         const token = auth.getToken;
 
-        if (!token) throw new Error("Usuário não autenticado.");
+        if (!token) throw new Error("User not authenticated.");
 
         const response = await getTranscriptions(token);
         if (!response.success) {
-          throw new Error(response.error || "Erro ao obter transcrições.");
+          throw new Error(response.error || "Error getting transcriptions.");
         }
 
         if (!response.data || !response.data.transcriptions) {
@@ -65,7 +65,7 @@ export const useTranscriptionStore = defineStore("transcription", {
         this.transcriptions = response.data.transcriptions;
         return response.data;
       } catch (err: any) {
-        console.error("Erro ao obter transcrições:", err);
+        console.error("Error getting transcriptions:", err);
         throw err;
       }
     },

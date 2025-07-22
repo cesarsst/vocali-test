@@ -1,25 +1,16 @@
+<script setup lang="ts">
+const { useAuthStore } = await import("@/store/useAuthStore");
+const { checkSession } = useAuthStore();
+
+onMounted(() => {
+  checkSession();
+});
+</script>
+
 <template>
   <div class="layout-grid">
     <!-- Navbar -->
-    <nav class="navbar blue darken-3">
-      <div class="nav-wrapper container">
-        <NuxtLink to="/" class="brand-logo">Logo</NuxtLink>
-        <a href="#" data-target="mobile-nav" class="sidenav-trigger right">
-          <i class="material-icons">menu</i>
-        </a>
-        <ul class="right hide-on-med-and-down">
-          <li><NuxtLink to="/">About</NuxtLink></li>
-          <li><NuxtLink to="/dashboard">Dashboard</NuxtLink></li>
-          <li><NuxtLink to="/login">Login</NuxtLink></li>
-        </ul>
-      </div>
-    </nav>
-
-    <!-- Mobile Nav -->
-    <ul class="sidenav" id="mobile-nav">
-      <li><NuxtLink to="/">Home</NuxtLink></li>
-      <li><NuxtLink to="/about">About</NuxtLink></li>
-    </ul>
+    <Navbar />
 
     <!-- Scrollable content area -->
     <main class="content-scrollable">

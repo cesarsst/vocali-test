@@ -6,7 +6,7 @@ const serverlessConfiguration: AWS = {
   plugins: ["serverless-offline"],
   provider: {
     name: "aws",
-    runtime: "nodejs18.x",
+    runtime: "nodejs20.x",
     region: "us-east-1",
     stage: "dev",
     environment: {

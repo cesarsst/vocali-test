@@ -5,7 +5,7 @@ import { RealtimeClient } from "@speechmatics/real-time-client";
 import dotenv from "dotenv";
 dotenv.config();
 
-const API_KEY = process.env.API_KEY; // sua API key Speechmatics
+const API_KEY = process.env.API_KEY; // your Speechmatics API key
 
 async function fetchJWT() {
   const resp = await fetch("https://mp.speechmatics.com/v1/api_keys?type=rt", {
@@ -26,7 +26,7 @@ const wss = new WebSocketServer({ server });
 
 wss.on("connection", async function connection(ws) {
   try {
-    console.log("Cliente conectado");
+    console.log("Client connected");
     let finalText = "";
     const client = new RealtimeClient();
     const jwt = await fetchJWT();
@@ -59,33 +59,33 @@ wss.on("connection", async function connection(ws) {
     });
 
     ws.on("message", (data) => {
-      // Recebe chunk de áudio do cliente e manda para Speechmatics
+      // Receives audio chunk from client and sends to Speechmatics
       client.sendAudio(data);
     });
 
     ws.on("close", () => {
-      console.log("Cliente desconectado");
+      console.log("Client disconnected");
       client.stopRecognition();
     });
     ws.on("disconnect", () => {
-      console.log("Cliente desconectado");
+      console.log("Client disconnected");
       client.stopRecognition();
     });
 
     ws.on("error", (error) => {
-      console.error("Erro no WebSocket:", error);
+      console.error("WebSocket error:", error);
       client.stopRecognition();
     });
   } catch (err) {
-    console.error("Erro ao iniciar cliente:", err);
+    console.error("Error starting client:", err);
     ws.send(
-      JSON.stringify({ type: "error", message: "Erro ao iniciar transcrição" })
+      JSON.stringify({ type: "error", message: "Error starting transcription" })
     );
     ws.close();
   }
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Servidor WS rodando na porta ${PORT}`);
+  console.log(`WebSocket server running on port ${PORT}`);
 });

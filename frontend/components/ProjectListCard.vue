@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { useTranscriptionStore } from "@/store/useUserTranscriptions";
 
 const store = useTranscriptionStore();
-const { transcriptions } = storeToRefs(store);
+const { transcriptions, loading } = storeToRefs(store);
 
 const allTranscriptions = computed(() => {
   return transcriptions.value.map((transcription) => ({
@@ -26,6 +26,10 @@ const paginatedTranscriptions = computed(() => {
   return allTranscriptions.value.slice(start, start + itemsPerPage);
 });
 
+const isDataReady = computed(() => {
+  return !loading.value && transcriptions.value.length >= 0;
+});
+
 function downloadTxt(projectName: string, text: string) {
   const blob = new Blob([text], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
@@ -44,7 +48,25 @@ function downloadTxt(projectName: string, text: string) {
     <div class="card-content">
       <span class="card-title"> Your Transcriptions </span>
 
-      <ul class="collection">
+      <!-- Loading State -->
+      <div v-if="loading" class="center-align" style="padding: 40px">
+        <div class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-blue-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transcriptions List -->
+      <ul v-else-if="isDataReady" class="collection">
         <li
           v-for="(transcription, index) in paginatedTranscriptions"
           :key="index"
@@ -66,7 +88,11 @@ function downloadTxt(projectName: string, text: string) {
       </ul>
     </div>
 
-    <div class="card-action center-align">
+    <!-- Pagination (only show when data is ready and there are transcriptions) -->
+    <div
+      v-if="isDataReady && allTranscriptions.length > 0"
+      class="card-action center-align"
+    >
       <button
         class="btn-flat"
         :disabled="currentPage === 1"
@@ -87,3 +113,27 @@ function downloadTxt(projectName: string, text: string) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.preloader-wrapper.active {
+  width: 50px;
+  height: 50px;
+}
+
+.spinner-layer {
+  border-color: #2196f3;
+}
+
+.collection-item {
+  transition: all 0.3s ease;
+}
+
+.collection-item:hover {
+  background-color: #f5f5f5;
+}
+
+.btn-flat:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+</style>

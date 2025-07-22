@@ -13,15 +13,17 @@ const loading = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
 
+// On mount, get the email from the URL parameters
 onMounted(() => {
   const emailParam = route.query.email;
   if (typeof emailParam === "string") {
     email.value = emailParam;
   } else {
-    errorMessage.value = "Email não fornecido.";
+    errorMessage.value = "Email not provided.";
   }
 });
 
+// Handle account confirmation
 const handleConfirm = async () => {
   errorMessage.value = "";
   successMessage.value = "";
@@ -29,11 +31,11 @@ const handleConfirm = async () => {
 
   try {
     await auth.confirmSignup(email.value, code.value);
-    successMessage.value = "Conta confirmada com sucesso!";
+    successMessage.value = "Account successfully confirmed!";
     setTimeout(() => router.push("/login"), 2000);
   } catch (error) {
-    console.error("Erro na confirmação:", error);
-    errorMessage.value = error.message || "Erro ao confirmar a conta.";
+    console.error("Error during confirmation:", error);
+    errorMessage.value = error.message || "Failed to confirm the account.";
   } finally {
     loading.value = false;
   }
@@ -56,7 +58,7 @@ const handleConfirm = async () => {
           <div class="card-image">
             <NuxtImg
               src="https://as1.ftcdn.net/v2/jpg/14/38/20/20/1000_F_1438202044_GeEdgMb3SqX7L30GUnsOltuEcO4KZRWY.jpg"
-              alt="Confirmação"
+              alt="Confirmation"
               class="img-responsive"
             />
             <span
@@ -67,7 +69,7 @@ const handleConfirm = async () => {
                 border-radius: 6px;
               "
             >
-              Confirmar Conta
+              Confirm Account
             </span>
           </div>
 
@@ -80,7 +82,7 @@ const handleConfirm = async () => {
                 </div>
 
                 <div class="input-field col s12">
-                  <label for="code">Código de Confirmação</label>
+                  <label for="code">Confirmation Code</label>
 
                   <input
                     id="code"
@@ -97,7 +99,7 @@ const handleConfirm = async () => {
                     :disabled="loading"
                     style="margin-top: 10px"
                   >
-                    {{ loading ? "Confirmando..." : "Confirmar" }}
+                    {{ loading ? "Confirming..." : "Confirm" }}
                   </button>
                 </div>
               </div>
@@ -115,7 +117,7 @@ const handleConfirm = async () => {
 
           <div class="card-action center-align">
             <router-link to="/login" class="blue-text text-darken-2">
-              Já confirmou? Entrar
+              Already confirmed? Sign in
             </router-link>
           </div>
         </div>

@@ -17,13 +17,6 @@ build/
 coverage/
 *.lcov
 
-# Terraform
-infrastructure/.terraform/
-infrastructure/.terraform.lock.hcl
-infrastructure/terraform.tfstate
-infrastructure/terraform.tfstate.backup
-infrastructure/*.tfplan
-
 # Lambda deployment package
 lambda-deployment.zip
 
@@ -59,6 +52,11 @@ jspm_packages/
 # dotenv environment variables file
 .env
 
+# Serverless directories
+.serverless/
+# Serverless deployment package
+serverless.zip
+
 # IDE
 .vscode/
 .idea/
@@ -74,3 +72,4 @@ jspm_packages/
 .Trashes
 ehthumbs.db
 Thumbs.db
+

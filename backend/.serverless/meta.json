@@ -3352,5 +3352,757 @@
         }
       }
     }
+  },
+  "/Users/cesarsoaresstenico/Documents/GitHub/vocali-test/backend/serverless.ts": {
+    "versionFramework": "4.17.1",
+    "servicePath": "/Users/cesarsoaresstenico/Documents/GitHub/vocali-test/backend/serverless.ts",
+    "serviceConfigFileName": "serverless.ts",
+    "service": {
+      "service": "user-service",
+      "useDotenv": true,
+      "plugins": [
+        "serverless-offline"
+      ],
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs20.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "environment": {
+          "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+          "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+          "COGNITO_CLIENT_SECRET": "<REDACTED>",
+          "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483"
+        },
+        "iamRoleStatements": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:PutItem",
+              "dynamodb:GetItem",
+              "dynamodb:Query",
+              "cognito-idp:SignUp"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+          }
+        ],
+        "versionFunctions": true
+      },
+      "functions": {
+        "signup": {
+          "handler": "src/lambdas/auth/signup.handler",
+          "events": [
+            {
+              "http": {
+                "path": "signup",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "signin": {
+          "handler": "src/lambdas/auth/signin.handler",
+          "events": [
+            {
+              "http": {
+                "path": "signin",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "confirmSignup": {
+          "handler": "src/lambdas/auth/confirmSignup.handler",
+          "events": [
+            {
+              "http": {
+                "path": "confirm-signup",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "upload": {
+          "handler": "src/lambdas/files/upload.handler",
+          "events": [
+            {
+              "http": {
+                "path": "upload",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "createTranscription": {
+          "handler": "src/lambdas/transcriptions/createTranscription.handler",
+          "timeout": 120,
+          "events": [
+            {
+              "http": {
+                "path": "create-transcription",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "getUserTranscriptions": {
+          "handler": "src/lambdas/transcriptions/getAllUserTranscription.handler",
+          "events": [
+            {
+              "http": {
+                "path": "get-transcriptions",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ]
+        }
+      },
+      "package": {
+        "individually": true
+      },
+      "custom": {
+        "esbuild": {
+          "bundle": true,
+          "minify": false,
+          "sourcemap": true,
+          "exclude": [
+            "aws-sdk"
+          ],
+          "target": "node18",
+          "define": {},
+          "platform": "node"
+        }
+      },
+      "resources": {
+        "Resources": {
+          "UserServiceTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "serverless-backend-table",
+              "BillingMode": "PAY_PER_REQUEST",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "PK",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "SK",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "PK",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "SK",
+                  "KeyType": "RANGE"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs20.x",
+      "region": "us-east-1",
+      "stage": "dev",
+      "environment": {
+        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+        "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+        "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+        "COGNITO_CLIENT_SECRET": "<REDACTED>",
+        "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483"
+      },
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:PutItem",
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "cognito-idp:SignUp"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject"
+          ],
+          "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+        }
+      ],
+      "versionFunctions": true
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "error": {
+      "message": "Unrecognized option \"host\". Run \"serverless deploy --help\" for a list of all available options.",
+      "stack": "ServerlessError2: Unrecognized option \"host\". Run \"serverless deploy --help\" for a list of all available options.\n    at ensure_supported_command_default (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1388:2608)\n    at runFramework (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1411:1639)\n    at async TraditionalRunner.run (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1407:28336)\n    at async route (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1582:2878)\n    at async Object.run (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1583:3661)\n    at async run2 (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1583:4815)",
+      "code": "UNSUPPORTED_CLI_OPTIONS"
+    },
+    "serviceRawFile": "import type { AWS } from \"@serverless/typescript\";\n\nconst serverlessConfiguration: AWS = {\n  service: \"user-service\",\n  useDotenv: true,\n  plugins: [\"serverless-offline\"],\n  provider: {\n    name: \"aws\",\n    runtime: \"nodejs20.x\",\n    region: \"us-east-1\",\n    stage: \"dev\",\n    environment: {\n      AWS_NODEJS_CONNECTION_REUSE_ENABLED: \"1\",\n      COGNITO_USER_POOL_ID: \"${env:COGNITO_USER_POOL_ID}\",\n      COGNITO_CLIENT_ID: \"${env:COGNITO_CLIENT_ID}\",\n      COGNITO_CLIENT_SECRET: \"${env:COGNITO_CLIENT_SECRET}\",\n      S3_BUCKET_NAME: \"${env:S3_BUCKET_NAME}\",\n    },\n    iamRoleStatements: [\n      {\n        Effect: \"Allow\",\n        Action: [\n          \"dynamodb:PutItem\",\n          \"dynamodb:GetItem\",\n          \"dynamodb:Query\",\n          \"cognito-idp:SignUp\",\n        ],\n        Resource: \"*\", // idealmente restrinja aos seus ARNs\n      },\n      {\n        Effect: \"Allow\",\n        Action: [\"s3:GetObject\", \"s3:PutObject\"],\n        Resource: \"arn:aws:s3:::user-service-uploads-${self:provider.stage}/*\",\n      },\n    ],\n  },\n  functions: {\n    signup: {\n      handler: \"src/lambdas/auth/signup.handler\",\n      events: [\n        {\n          http: {\n            path: \"signup\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    signin: {\n      handler: \"src/lambdas/auth/signin.handler\",\n      events: [\n        {\n          http: {\n            path: \"signin\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    confirmSignup: {\n      handler: \"src/lambdas/auth/confirmSignup.handler\",\n      events: [\n        {\n          http: {\n            path: \"confirm-signup\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    upload: {\n      handler: \"src/lambdas/files/upload.handler\",\n      events: [\n        {\n          http: {\n            path: \"upload\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    createTranscription: {\n      handler: \"src/lambdas/transcriptions/createTranscription.handler\",\n      timeout: 120,\n      events: [\n        {\n          http: {\n            path: \"create-transcription\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    getUserTranscriptions: {\n      handler: \"src/lambdas/transcriptions/getAllUserTranscription.handler\",\n      events: [\n        {\n          http: {\n            path: \"get-transcriptions\",\n            method: \"get\",\n            cors: true,\n          },\n        },\n      ],\n    },\n  },\n  package: { individually: true },\n  custom: {\n    esbuild: {\n      bundle: true,\n      minify: false,\n      sourcemap: true,\n      exclude: [\"aws-sdk\"],\n      target: \"node18\",\n      define: { \"require.resolve\": undefined },\n      platform: \"node\",\n    },\n  },\n  // resources: {\n  //   Resources: {\n  //     UserUploadsBucket: {\n  //       Type: \"AWS::S3::Bucket\",\n  //       Properties: {\n  //         BucketName: \"${env:S3_BUCKET_NAME}\",\n  //         CorsConfiguration: {\n  //           CorsRules: [\n  //             {\n  //               AllowedOrigins: [\"*\"], // ajuste conforme necessário\n  //               AllowedMethods: [\"GET\", \"PUT\", \"POST\", \"DELETE\"],\n  //               AllowedHeaders: [\"*\"],\n  //               MaxAge: 3000,\n  //             },\n  //           ],\n  //         },\n  //       },\n  //     },\n  //   },\n  // },\n  resources: {\n    Resources: {\n      UserServiceTable: {\n        Type: \"AWS::DynamoDB::Table\",\n        Properties: {\n          TableName: \"${env:DYNAMODB_TABLE_NAME}\",\n          BillingMode: \"PAY_PER_REQUEST\",\n          AttributeDefinitions: [\n            { AttributeName: \"PK\", AttributeType: \"S\" },\n            { AttributeName: \"SK\", AttributeType: \"S\" },\n          ],\n          KeySchema: [\n            { AttributeName: \"PK\", KeyType: \"HASH\" },\n            { AttributeName: \"SK\", KeyType: \"RANGE\" },\n          ],\n        },\n      },\n    },\n  },\n};\n\nmodule.exports = serverlessConfiguration;\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {
+      "host": "0.0.0.0"
+    },
+    "orgId": "6d4b7dbc-e514-443b-a095-453832d16952",
+    "orgName": "cesarstenico",
+    "userId": "HsWBn9DTfxgzb2d4k0",
+    "userName": "cesarstenico",
+    "serviceProviderAwsAccountId": "720905201408",
+    "serviceProviderAwsCfStackName": "user-service-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:720905201408:stack/user-service-dev/ecd42a30-62b7-11f0-bf1a-12e1e2ec4969",
+    "serviceProviderAwsCfStackCreated": "2025-07-17T02:44:14.142Z",
+    "serviceProviderAwsCfStackUpdated": "2025-07-18T14:11:45.828Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "ConfirmSignupLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-confirmSignup:7",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-ConfirmSignupLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "SigninLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-signin:10",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-SigninLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "SignupLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-signup:13",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-SignupLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://27h4phm7p0.execute-api.us-east-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-user-service-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+        "ExportName": "sls-user-service-dev-ServerlessDeploymentBucketName"
+      },
+      {
+        "OutputKey": "UploadLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-upload:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-UploadLambdaFunctionQualifiedArn"
+      }
+    ]
+  },
+  "/Users/cesarsoaresstenico/Documents/GitHub/vocali-test/backend/serverless.js": {
+    "versionFramework": "4.17.1",
+    "servicePath": "/Users/cesarsoaresstenico/Documents/GitHub/vocali-test/backend/serverless.js",
+    "serviceConfigFileName": "serverless.js",
+    "service": {
+      "service": "user-service",
+      "useDotenv": true,
+      "plugins": [
+        "serverless-offline"
+      ],
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "environment": {
+          "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+          "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+          "COGNITO_CLIENT_SECRET": "<REDACTED>",
+          "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483"
+        },
+        "iamRoleStatements": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:PutItem",
+              "dynamodb:GetItem",
+              "dynamodb:Query",
+              "cognito-idp:SignUp"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+          }
+        ],
+        "versionFunctions": true
+      },
+      "functions": {
+        "signup": {
+          "handler": "src/lambdas/auth/signup.handler",
+          "events": [
+            {
+              "http": {
+                "path": "signup",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "signin": {
+          "handler": "src/lambdas/auth/signin.handler",
+          "events": [
+            {
+              "http": {
+                "path": "signin",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "confirmSignup": {
+          "handler": "src/lambdas/auth/confirmSignup.handler",
+          "events": [
+            {
+              "http": {
+                "path": "confirm-signup",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "upload": {
+          "handler": "src/lambdas/files/upload.handler",
+          "events": [
+            {
+              "http": {
+                "path": "upload",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "createTranscription": {
+          "handler": "src/lambdas/transcriptions/createTranscription.handler",
+          "timeout": 120,
+          "events": [
+            {
+              "http": {
+                "path": "create-transcription",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "getUserTranscriptions": {
+          "handler": "src/lambdas/transcriptions/getAllUserTranscription.handler",
+          "events": [
+            {
+              "http": {
+                "path": "get-transcriptions",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ]
+        }
+      },
+      "package": {
+        "individually": true
+      },
+      "custom": {
+        "esbuild": {
+          "bundle": true,
+          "minify": false,
+          "sourcemap": true,
+          "exclude": [
+            "aws-sdk"
+          ],
+          "target": "node18",
+          "define": {},
+          "platform": "node"
+        }
+      },
+      "resources": {
+        "Resources": {
+          "UserServiceTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "serverless-backend-table",
+              "BillingMode": "PAY_PER_REQUEST",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "PK",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "SK",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "PK",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "SK",
+                  "KeyType": "RANGE"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "region": "us-east-1",
+      "stage": "dev",
+      "environment": {
+        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+        "COGNITO_USER_POOL_ID": "us-east-1_rPLcKBh3x",
+        "COGNITO_CLIENT_ID": "64o7qb5gtfm5a997im1e2849hu",
+        "COGNITO_CLIENT_SECRET": "<REDACTED>",
+        "S3_BUCKET_NAME": "serverless-framework-deployments-us-east-1-f4504edc-6483"
+      },
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:PutItem",
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "cognito-idp:SignUp"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject"
+          ],
+          "Resource": "arn:aws:s3:::user-service-uploads-dev/*"
+        }
+      ],
+      "versionFunctions": true
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "error": {
+      "message": "Serverless plugin \"serverless-offline\" not found. Make sure it's installed and listed in the \"plugins\" section of your serverless config file. Use the --debug flag to learn more.",
+      "stack": "ServerlessError2: Serverless plugin \"serverless-offline\" not found. Make sure it's installed and listed in the \"plugins\" section of your serverless config file. Use the --debug flag to learn more.\n    at PluginManager.resolveServicePlugins (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1377:3214)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async PluginManager.loadAllPlugins (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1377:1592)\n    at async Serverless.init (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1384:9847)\n    at async runFramework (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1411:839)\n    at async TraditionalRunner.run (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1407:28336)\n    at async route (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1582:2878)\n    at async Object.run (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1583:3661)\n    at async run2 (file:///Users/cesarsoaresstenico/.serverless/releases/4.17.1/package/dist/sf-core.js:1583:4815)",
+      "code": "PLUGIN_NOT_FOUND"
+    },
+    "serviceRawFile": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst serverlessConfiguration = {\n    service: \"user-service\",\n    useDotenv: true,\n    plugins: [\"serverless-offline\"],\n    provider: {\n        name: \"aws\",\n        runtime: \"nodejs18.x\",\n        region: \"us-east-1\",\n        stage: \"dev\",\n        environment: {\n            AWS_NODEJS_CONNECTION_REUSE_ENABLED: \"1\",\n            COGNITO_USER_POOL_ID: \"${env:COGNITO_USER_POOL_ID}\",\n            COGNITO_CLIENT_ID: \"${env:COGNITO_CLIENT_ID}\",\n            COGNITO_CLIENT_SECRET: \"${env:COGNITO_CLIENT_SECRET}\",\n            S3_BUCKET_NAME: \"${env:S3_BUCKET_NAME}\",\n        },\n        iamRoleStatements: [\n            {\n                Effect: \"Allow\",\n                Action: [\n                    \"dynamodb:PutItem\",\n                    \"dynamodb:GetItem\",\n                    \"dynamodb:Query\",\n                    \"cognito-idp:SignUp\",\n                ],\n                Resource: \"*\",\n            },\n            {\n                Effect: \"Allow\",\n                Action: [\"s3:GetObject\", \"s3:PutObject\"],\n                Resource: \"arn:aws:s3:::user-service-uploads-${self:provider.stage}/*\",\n            },\n        ],\n    },\n    functions: {\n        signup: {\n            handler: \"src/lambdas/auth/signup.handler\",\n            events: [\n                {\n                    http: {\n                        path: \"signup\",\n                        method: \"post\",\n                        cors: true,\n                    },\n                },\n            ],\n        },\n        signin: {\n            handler: \"src/lambdas/auth/signin.handler\",\n            events: [\n                {\n                    http: {\n                        path: \"signin\",\n                        method: \"post\",\n                        cors: true,\n                    },\n                },\n            ],\n        },\n        confirmSignup: {\n            handler: \"src/lambdas/auth/confirmSignup.handler\",\n            events: [\n                {\n                    http: {\n                        path: \"confirm-signup\",\n                        method: \"post\",\n                        cors: true,\n                    },\n                },\n            ],\n        },\n        upload: {\n            handler: \"src/lambdas/files/upload.handler\",\n            events: [\n                {\n                    http: {\n                        path: \"upload\",\n                        method: \"post\",\n                        cors: true,\n                    },\n                },\n            ],\n        },\n        createTranscription: {\n            handler: \"src/lambdas/transcriptions/createTranscription.handler\",\n            timeout: 120,\n            events: [\n                {\n                    http: {\n                        path: \"create-transcription\",\n                        method: \"post\",\n                        cors: true,\n                    },\n                },\n            ],\n        },\n        getUserTranscriptions: {\n            handler: \"src/lambdas/transcriptions/getAllUserTranscription.handler\",\n            events: [\n                {\n                    http: {\n                        path: \"get-transcriptions\",\n                        method: \"get\",\n                        cors: true,\n                    },\n                },\n            ],\n        },\n    },\n    package: { individually: true },\n    custom: {\n        esbuild: {\n            bundle: true,\n            minify: false,\n            sourcemap: true,\n            exclude: [\"aws-sdk\"],\n            target: \"node18\",\n            define: { \"require.resolve\": undefined },\n            platform: \"node\",\n        },\n    },\n    resources: {\n        Resources: {\n            UserServiceTable: {\n                Type: \"AWS::DynamoDB::Table\",\n                Properties: {\n                    TableName: \"${env:DYNAMODB_TABLE_NAME}\",\n                    BillingMode: \"PAY_PER_REQUEST\",\n                    AttributeDefinitions: [\n                        { AttributeName: \"PK\", AttributeType: \"S\" },\n                        { AttributeName: \"SK\", AttributeType: \"S\" },\n                    ],\n                    KeySchema: [\n                        { AttributeName: \"PK\", KeyType: \"HASH\" },\n                        { AttributeName: \"SK\", KeyType: \"RANGE\" },\n                    ],\n                },\n            },\n        },\n    },\n};\nmodule.exports = serverlessConfiguration;\n//# sourceMappingURL=serverless.js.map",
+    "command": [
+      "offline"
+    ],
+    "options": {},
+    "orgId": "6d4b7dbc-e514-443b-a095-453832d16952",
+    "orgName": "cesarstenico",
+    "userId": "HsWBn9DTfxgzb2d4k0",
+    "userName": "cesarstenico",
+    "serviceProviderAwsAccountId": "720905201408",
+    "serviceProviderAwsCfStackName": "user-service-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:720905201408:stack/user-service-dev/ecd42a30-62b7-11f0-bf1a-12e1e2ec4969",
+    "serviceProviderAwsCfStackCreated": "2025-07-17T02:44:14.142Z",
+    "serviceProviderAwsCfStackUpdated": "2025-07-18T14:11:45.828Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "ConfirmSignupLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-confirmSignup:7",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-ConfirmSignupLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "SigninLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-signin:10",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-SigninLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "SignupLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-signup:13",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-SignupLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://27h4phm7p0.execute-api.us-east-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-user-service-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-f4504edc-6483",
+        "ExportName": "sls-user-service-dev-ServerlessDeploymentBucketName"
+      },
+      {
+        "OutputKey": "UploadLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:720905201408:function:user-service-dev-upload:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-user-service-dev-UploadLambdaFunctionQualifiedArn"
+      }
+    ]
+  },
+  "/backend/serverless.ts": {
+    "versionFramework": "4.17.1",
+    "servicePath": "/backend/serverless.ts",
+    "serviceConfigFileName": "serverless.ts",
+    "service": {
+      "service": "user-service",
+      "useDotenv": true,
+      "plugins": [
+        "serverless-offline"
+      ],
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs20.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "environment": {
+          "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          "COGNITO_USER_POOL_ID": "${env:COGNITO_USER_POOL_ID}",
+          "COGNITO_CLIENT_ID": "${env:COGNITO_CLIENT_ID}",
+          "COGNITO_CLIENT_SECRET": "<REDACTED>",
+          "S3_BUCKET_NAME": "${env:S3_BUCKET_NAME}"
+        },
+        "iamRoleStatements": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:PutItem",
+              "dynamodb:GetItem",
+              "dynamodb:Query",
+              "cognito-idp:SignUp"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::user-service-uploads-${self:provider.stage}/*"
+          }
+        ]
+      },
+      "functions": {
+        "signup": {
+          "handler": "src/lambdas/auth/signup.handler",
+          "events": [
+            {
+              "http": {
+                "path": "signup",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "signin": {
+          "handler": "src/lambdas/auth/signin.handler",
+          "events": [
+            {
+              "http": {
+                "path": "signin",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "confirmSignup": {
+          "handler": "src/lambdas/auth/confirmSignup.handler",
+          "events": [
+            {
+              "http": {
+                "path": "confirm-signup",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "upload": {
+          "handler": "src/lambdas/files/upload.handler",
+          "events": [
+            {
+              "http": {
+                "path": "upload",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "createTranscription": {
+          "handler": "src/lambdas/transcriptions/createTranscription.handler",
+          "timeout": 120,
+          "events": [
+            {
+              "http": {
+                "path": "create-transcription",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "getUserTranscriptions": {
+          "handler": "src/lambdas/transcriptions/getAllUserTranscription.handler",
+          "events": [
+            {
+              "http": {
+                "path": "get-transcriptions",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ]
+        }
+      },
+      "package": {
+        "individually": true
+      },
+      "custom": {
+        "esbuild": {
+          "bundle": true,
+          "minify": false,
+          "sourcemap": true,
+          "exclude": [
+            "aws-sdk"
+          ],
+          "target": "node18",
+          "define": {},
+          "platform": "node"
+        }
+      },
+      "resources": {
+        "Resources": {
+          "UserServiceTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "${env:DYNAMODB_TABLE_NAME}",
+              "BillingMode": "PAY_PER_REQUEST",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "PK",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "SK",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "PK",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "SK",
+                  "KeyType": "RANGE"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs20.x",
+      "region": "us-east-1",
+      "stage": "dev",
+      "environment": {
+        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+        "COGNITO_USER_POOL_ID": "${env:COGNITO_USER_POOL_ID}",
+        "COGNITO_CLIENT_ID": "${env:COGNITO_CLIENT_ID}",
+        "COGNITO_CLIENT_SECRET": "<REDACTED>",
+        "S3_BUCKET_NAME": "${env:S3_BUCKET_NAME}"
+      },
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:PutItem",
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "cognito-idp:SignUp"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject"
+          ],
+          "Resource": "arn:aws:s3:::user-service-uploads-${self:provider.stage}/*"
+        }
+      ]
+    },
+    "error": {
+      "message": "You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".",
+      "stack": "Error: You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".\n    at Authentication.getAuthenticatedData (file:///root/.serverless/releases/4.17.1/package/dist/sf-core.js:828:10901)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Authentication.authenticate (file:///root/.serverless/releases/4.17.1/package/dist/sf-core.js:830:22245)\n    at async TraditionalRunner.resolveVariablesAndAuthenticate (file:///root/.serverless/releases/4.17.1/package/dist/sf-core.js:834:2379)\n    at async TraditionalRunner.run (file:///root/.serverless/releases/4.17.1/package/dist/sf-core.js:1407:27919)\n    at async route (file:///root/.serverless/releases/4.17.1/package/dist/sf-core.js:1582:2878)\n    at async Object.run (file:///root/.serverless/releases/4.17.1/package/dist/sf-core.js:1583:3661)\n    at async run2 (file:///root/.serverless/releases/4.17.1/package/dist/sf-core.js:1583:4815)"
+    },
+    "serviceRawFile": "import type { AWS } from \"@serverless/typescript\";\n\nconst serverlessConfiguration: AWS = {\n  service: \"user-service\",\n  useDotenv: true,\n  plugins: [\"serverless-offline\"],\n  provider: {\n    name: \"aws\",\n    runtime: \"nodejs20.x\",\n    region: \"us-east-1\",\n    stage: \"dev\",\n    environment: {\n      AWS_NODEJS_CONNECTION_REUSE_ENABLED: \"1\",\n      COGNITO_USER_POOL_ID: \"${env:COGNITO_USER_POOL_ID}\",\n      COGNITO_CLIENT_ID: \"${env:COGNITO_CLIENT_ID}\",\n      COGNITO_CLIENT_SECRET: \"${env:COGNITO_CLIENT_SECRET}\",\n      S3_BUCKET_NAME: \"${env:S3_BUCKET_NAME}\",\n    },\n    iamRoleStatements: [\n      {\n        Effect: \"Allow\",\n        Action: [\n          \"dynamodb:PutItem\",\n          \"dynamodb:GetItem\",\n          \"dynamodb:Query\",\n          \"cognito-idp:SignUp\",\n        ],\n        Resource: \"*\", // idealmente restrinja aos seus ARNs\n      },\n      {\n        Effect: \"Allow\",\n        Action: [\"s3:GetObject\", \"s3:PutObject\"],\n        Resource: \"arn:aws:s3:::user-service-uploads-${self:provider.stage}/*\",\n      },\n    ],\n  },\n  functions: {\n    signup: {\n      handler: \"src/lambdas/auth/signup.handler\",\n      events: [\n        {\n          http: {\n            path: \"signup\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    signin: {\n      handler: \"src/lambdas/auth/signin.handler\",\n      events: [\n        {\n          http: {\n            path: \"signin\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    confirmSignup: {\n      handler: \"src/lambdas/auth/confirmSignup.handler\",\n      events: [\n        {\n          http: {\n            path: \"confirm-signup\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    upload: {\n      handler: \"src/lambdas/files/upload.handler\",\n      events: [\n        {\n          http: {\n            path: \"upload\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    createTranscription: {\n      handler: \"src/lambdas/transcriptions/createTranscription.handler\",\n      timeout: 120,\n      events: [\n        {\n          http: {\n            path: \"create-transcription\",\n            method: \"post\",\n            cors: true,\n          },\n        },\n      ],\n    },\n    getUserTranscriptions: {\n      handler: \"src/lambdas/transcriptions/getAllUserTranscription.handler\",\n      events: [\n        {\n          http: {\n            path: \"get-transcriptions\",\n            method: \"get\",\n            cors: true,\n          },\n        },\n      ],\n    },\n  },\n  package: { individually: true },\n  custom: {\n    esbuild: {\n      bundle: true,\n      minify: false,\n      sourcemap: true,\n      exclude: [\"aws-sdk\"],\n      target: \"node18\",\n      define: { \"require.resolve\": undefined },\n      platform: \"node\",\n    },\n  },\n  // resources: {\n  //   Resources: {\n  //     UserUploadsBucket: {\n  //       Type: \"AWS::S3::Bucket\",\n  //       Properties: {\n  //         BucketName: \"${env:S3_BUCKET_NAME}\",\n  //         CorsConfiguration: {\n  //           CorsRules: [\n  //             {\n  //               AllowedOrigins: [\"*\"], // ajuste conforme necessário\n  //               AllowedMethods: [\"GET\", \"PUT\", \"POST\", \"DELETE\"],\n  //               AllowedHeaders: [\"*\"],\n  //               MaxAge: 3000,\n  //             },\n  //           ],\n  //         },\n  //       },\n  //     },\n  //   },\n  // },\n  resources: {\n    Resources: {\n      UserServiceTable: {\n        Type: \"AWS::DynamoDB::Table\",\n        Properties: {\n          TableName: \"${env:DYNAMODB_TABLE_NAME}\",\n          BillingMode: \"PAY_PER_REQUEST\",\n          AttributeDefinitions: [\n            { AttributeName: \"PK\", AttributeType: \"S\" },\n            { AttributeName: \"SK\", AttributeType: \"S\" },\n          ],\n          KeySchema: [\n            { AttributeName: \"PK\", KeyType: \"HASH\" },\n            { AttributeName: \"SK\", KeyType: \"RANGE\" },\n          ],\n        },\n      },\n    },\n  },\n};\n\nmodule.exports = serverlessConfiguration;\n",
+    "command": [
+      "offline"
+    ],
+    "options": {},
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
   }
 }

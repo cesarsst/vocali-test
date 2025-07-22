@@ -5,6 +5,7 @@ const transcript = ref("");
 const partial = ref("");
 const ws = ref<WebSocket | null>(null);
 const isRecording = ref(false);
+const socketStatus = ref("Disconnected");
 let mediaRecorder: MediaRecorder | null = null;
 
 function connectWebSocket() {
@@ -34,6 +35,7 @@ function startRecording() {
   if (!ws.value || ws.value.readyState !== WebSocket.OPEN) {
     try {
       connectWebSocket();
+      socketStatus.value = "Connected";
     } catch (error) {
       console.error("Error connecting to WebSocket:", error);
       return;
@@ -66,11 +68,8 @@ function stopRecording() {
   ws.value?.close();
   ws.value = null;
   isRecording.value = false;
+  socketStatus.value = "Disconnected";
 }
-
-onMounted(() => {
-  connectWebSocket();
-});
 
 onBeforeUnmount(() => {
   stopRecording();
@@ -81,6 +80,8 @@ onBeforeUnmount(() => {
   <div class="card z-depth-3 h-100">
     <div class="card-content">
       <span class="card-title">Real Time Transcription</span>
+
+      <p class="grey-text text-darken-1">WebSocket state: {{ socketStatus }}</p>
 
       <div class="row">
         <div class="col s6">

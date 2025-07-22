@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { getApiUrl } from "@/utils/api";
-
 interface User {
   email: string;
   name?: string;
@@ -32,7 +31,6 @@ export const useAuthStore = defineStore("auth", {
         localStorage.setItem("auth_token", res.token);
       } catch (error: any) {
         console.error("Login error:", error);
-        this.logout();
         throw error;
       }
     },
@@ -76,11 +74,14 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     logout() {
+      const router = useRouter();
+
       this.isLoggedIn = false;
       this.token = null;
       if (typeof window !== "undefined") {
         localStorage.removeItem("auth_token");
       }
+      router.push("/");
     },
     checkSession() {
       if (typeof window !== "undefined") {

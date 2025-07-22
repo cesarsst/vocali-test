@@ -1,11 +1,19 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
+  devServer: {
+    port: 3000,
+  },
+  nitro: {
+    preset: "node",
+  },
+  ssr: false,
   css: ["materialize-css/dist/css/materialize.min.css"],
   vite: {
     define: {
       global: {},
     },
   },
+
   // app: {
   //   head: {
   //     script: [{ src: "/materialize.min.js", defer: true }],
