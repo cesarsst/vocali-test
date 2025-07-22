@@ -1,57 +1,57 @@
 # vocali-test
 
-Prueba técnica realizada por Cesar Soares Stenico.
+Technical test by Cesar Soares Stenico.
 
-## Projeto Full Stack com Docker Compose
+## Full Stack Project with Docker Compose
 
-Este projeto contém dois serviços principais:
+This project contains two main services:
 
-- **Frontend**: Aplicação web (Nuxt 3)
-- **Backend**: API (Node.js) com Serverless e Servidor websocket
-- **Docker Compose**: Orquestração dos serviços em containers
+- **Frontend**: Web application (Nuxt 3)
+- **Backend**: API (Node.js) with Serverless and WebSocket server
+- **Docker Compose**: Orchestration of the services in containers
 
 ---
 
-## Estrutura de Pastas
+## Folder Structure
 
 ```
 .
-├── backend/           # Código do backend
+├── backend/           # Backend code
 │   └── Dockerfile
-├── frontend/          # Código do frontend
+├── frontend/          # Frontend code
 │   └── Dockerfile
-├── docker-compose.yml # Orquestração dos containers
+├── docker-compose.yml # Container orchestration
 └── README.md
 ```
 
 ---
 
-## Pré-requisitos
+## Prerequisites
 
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
-- [Nginx] (https://nginx.org/en/download.html)
-- Una cuenta en Speechmatics con clave API
-- Credenciais da AWS configuradas
+- [Nginx](https://nginx.org/en/download.html)
+- A Speechmatics account with API key
+- Configured AWS credentials
 
 ---
 
-## Como rodar o projeto
+## How to Run the Project
 
-1. Clone o repositório:
+1. Clone the repository:
 
    ```bash
-   git clone https://github.com/seu-usuario/seu-projeto.git
-   cd seu-projeto
+   git clone https://github.com/your-user/your-project.git
+   cd your-project
    ```
 
-2. Suba os containers:
+2. Start the containers:
 
    ```bash
    docker-compose up --build
    ```
 
-3. Inicie as funções lambdas localmente (fora do docker):
+3. Start the Lambda functions locally (outside Docker):
 
    ```bash
    cd backend
@@ -59,29 +59,29 @@ Este projeto contém dois serviços principais:
    npm run serverless-dev
    ```
 
-4. Acesse os serviços:
+4. Access the services:
 
-   - **Frontend:** [http://localhost:3001](http://localhost:3000)
+   - **Frontend:** [http://localhost:3001](http://localhost:3001)
    - **Backend (lambda):** [http://localhost:3000](http://localhost:3000)
    - **Backend (websocket):** [http://localhost:8080](http://localhost:8080)
 
 ---
 
-## Comandos úteis
+## Useful Commands
 
-- Subir em segundo plano:
+- Run in background:
 
   ```bash
   docker-compose up -d
   ```
 
-- Parar os containers:
+- Stop containers:
 
   ```bash
   docker-compose down
   ```
 
-- Ver logs:
+- View logs:
 
   ```bash
   docker-compose logs -f
@@ -89,20 +89,20 @@ Este projeto contém dois serviços principais:
 
 ---
 
-## Variáveis de ambiente
+## Environment Variables
 
-Você pode definir variáveis em arquivos `.env` dentro das pastas `backend/` e `frontend/`.
+You can define variables in `.env` files inside the `backend/` and `frontend/` folders.
 
-**Exemplo das variavies necessarias em (`backend/.env.exemple`) e (`fronent/.env.exemple`):**
-
----
-
-## Observações
-
-- Certifique-se de que as portas **3001** (frontend), **3000** e **8080** (backend) estejam livres.
+**Example of required variables in (`backend/.env.example`) and (`frontend/.env.example`):**
 
 ---
 
-## Licença
+## Notes
+
+- Make sure that ports **3001** (frontend), **3000** and **8080** (backend) are free.
+
+---
+
+## License
 
 MIT
